@@ -14,6 +14,9 @@ struct PokemonDetailView: View {
     
     var body: some View {
         VStack {
+            
+            PokemonView(pokemon: pokemon)
+            
             VStack(spacing: 10) {
                 Text("**ID** \(vm.pokemonDetails?.id ?? 0)")
                 Text("**Weight** \(vm.formatHeightWeight(value: vm.pokemonDetails?.weight ?? 0)) KG")
