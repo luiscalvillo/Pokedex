@@ -14,7 +14,7 @@ final class ViewModel: ObservableObject {
     @Published var pokemonList = [Pokemon]()
     @Published var pokemonDetails: DetailPokemon?
     @Published var searchText = ""
-    
+        
     var filteredPokemon: [Pokemon] {
         return searchText == "" ? pokemonList : pokemonList.filter {
             $0.name.contains(searchText.lowercased())
@@ -23,6 +23,7 @@ final class ViewModel: ObservableObject {
     
     init() {
         self.pokemonList = pokemonManager.getPokemon()
+      
     }
     
     func getPokemonIndex(pokemon: Pokemon) -> Int {
@@ -41,6 +42,7 @@ final class ViewModel: ObservableObject {
         pokemonManager.getDetailedPokemon(id: id) { data in
             DispatchQueue.main.async {
                 self.pokemonDetails = data
+                print("\(data)")
             }
         }
     }

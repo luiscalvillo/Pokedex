@@ -11,6 +11,8 @@ struct ContentView: View {
     
     @StateObject var vm = ViewModel()
     
+    @State private var showDetailView: Bool = false
+    
     private let adaptiveColumns = [
         GridItem(.adaptive(minimum: 150))
     ]
@@ -21,7 +23,7 @@ struct ContentView: View {
                 LazyVGrid(columns: adaptiveColumns, spacing: 10){
                     ForEach(vm.filteredPokemon) { pokemon in
                         NavigationLink(destination: PokemonDetailView(pokemon: pokemon)) {
-                            PokemonView(pokemon: pokemon)
+                            PokemonView(showDetailView: $showDetailView, pokemon: pokemon)
                         }
                     }
                 }

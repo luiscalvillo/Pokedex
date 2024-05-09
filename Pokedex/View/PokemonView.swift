@@ -10,8 +10,12 @@ import SwiftUI
 struct PokemonView: View {
     
     @EnvironmentObject var vm: ViewModel
+    
+    @Binding var showDetailView: Bool
+    
     let pokemon: Pokemon
     let dimensions: Double = 140
+    let detailViewDimensions: Double = 300
     
     var body: some View {
         VStack {
@@ -19,10 +23,10 @@ struct PokemonView: View {
                 image
                     .resizable()
                     .scaledToFit()
-                    .frame(width: dimensions, height: dimensions)
+                    .frame(width: showDetailView ? detailViewDimensions : dimensions, height: showDetailView ? detailViewDimensions : dimensions)
             } placeholder: {
                 ProgressView()
-                    .frame(width: dimensions, height: dimensions)
+                    .frame(width: showDetailView ? detailViewDimensions : dimensions, height: showDetailView ? detailViewDimensions : dimensions)
             }
             .background(.thinMaterial)
             .clipShape(Circle())
@@ -35,5 +39,5 @@ struct PokemonView: View {
 }
 
 #Preview {
-    PokemonView(pokemon: Pokemon.samplePokemon).environmentObject(ViewModel())
+    PokemonView(showDetailView: .constant(false), pokemon: Pokemon.samplePokemon).environmentObject(ViewModel())
 }
