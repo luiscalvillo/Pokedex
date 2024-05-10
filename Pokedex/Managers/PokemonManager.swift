@@ -22,4 +22,12 @@ class PokemonManager {
             print(error)
         }
     }
+    
+    func getPokemonSpecies(id: Int, _completetion:@escaping (Species) -> ()) {
+        Bundle.main.fetchData(url: "https://pokeapi.co/api/v2/pokemon-species/\(id)/", model: Species.self) { data in
+            _completetion(data)
+        } failure: { error in
+            print(error)
+        }
+    }
 }

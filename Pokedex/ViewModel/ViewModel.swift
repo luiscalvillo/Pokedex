@@ -14,6 +14,8 @@ final class ViewModel: ObservableObject {
     @Published var pokemonList = [Pokemon]()
     @Published var pokemonDetails: DetailPokemon?
     @Published var searchText = ""
+    
+    @Published var species: Species?
         
     var filteredPokemon: [Pokemon] {
         return searchText == "" ? pokemonList : pokemonList.filter {
@@ -23,7 +25,6 @@ final class ViewModel: ObservableObject {
     
     init() {
         self.pokemonList = pokemonManager.getPokemon()
-      
     }
     
     func getPokemonIndex(pokemon: Pokemon) -> Int {
@@ -37,11 +38,23 @@ final class ViewModel: ObservableObject {
     func getDetails(pokemon: Pokemon) {
         let id = getPokemonIndex(pokemon: pokemon)
         
-        self.pokemonDetails = DetailPokemon(id: 0, height: 0, weight: 0)
-        
+        self.pokemonDetails = DetailPokemon(id: 0, height: 0, weight: 0, types: [TypeElement.init(slot: 0, type: PokemonType.init(name: "fire"))] )
         pokemonManager.getDetailedPokemon(id: id) { data in
             DispatchQueue.main.async {
                 self.pokemonDetails = data
+                print("\(data)")
+            }
+        }
+    }
+    
+    func getSpecies(pokemon: Pokemon) {
+        let id = getPokemonIndex(pokemon: pokemon)
+        
+        self.species = Species(captureRate: 0, color: PokemonColor.init(name: "white"), flavorTextEntries: [FlavorTextEntries.init(flavorText: "test")])
+        
+        pokemonManager.getPokemonSpecies(id: id) { data in
+            DispatchQueue.main.async {
+                self.species = data
                 print("\(data)")
             }
         }

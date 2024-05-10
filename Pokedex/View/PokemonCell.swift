@@ -17,8 +17,6 @@ struct PokemonCell: View {
                 }
             }
         }
-        .background(Color.green)
-
     }
 }
 

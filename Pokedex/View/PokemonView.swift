@@ -31,8 +31,9 @@ struct PokemonView: View {
             .background(.thinMaterial)
             .clipShape(Circle())
             
-            Text("\(pokemon.name.capitalized)")
-                .font(.system(size: 16, weight: .regular, design: .monospaced))
+            Text("\(pokemon.name.uppercased())")
+                .font(showDetailView ? .title : .headline)
+                .fontWeight(.bold)
                 .padding(.bottom, 20)
         }
     }
