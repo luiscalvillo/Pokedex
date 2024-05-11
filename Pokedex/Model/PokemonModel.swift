@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import SwiftUI
 
 struct PokemonPage: Codable {
     let count: Int
@@ -28,10 +29,21 @@ struct DetailPokemon: Codable {
     let types: [TypeElement]
 }
 
+struct PokemonColor: Codable {
+    let name: String
+}
+
+struct FlavorTextEntries: Codable {
+    let flavorText: String
+    
+    enum CodingKeys: String, CodingKey {
+        case flavorText = "flavor_text"
+    }
+}
 
 // MARK: - Pokemon Type
 
-struct TypeElement: Codable {
+struct TypeElement: Codable{
     let slot: Int
     let type: PokemonType
 }
@@ -54,41 +66,58 @@ struct Species: Codable {
     static let sampleSpecies = Species(captureRate: 123, color: PokemonColor.init(name: "white"), flavorTextEntries: [FlavorTextEntries.init(flavorText: "text")] )
 }
 
-struct PokemonColor: Codable {
-    let name: String
+enum ListOfPokemonTypes: String {
+    case bug
+    case dragon
+    case electric
+    case fairy
+    case fighting
+    case fire
+    case flying
+    case grass
+    case ground
+    case ice
+    case normal
+    case poison
+    case psychic
+    case rock
+    case water
 }
 
-struct FlavorTextEntries: Codable {
-    let flavorText: String
-    
-    enum CodingKeys: String, CodingKey {
-        case flavorText = "flavor_text"
+
+func convertPokemonTypeToAColor(type: String) -> Color {
+    switch type {
+    case "bug":
+        return .pink
+    case "dragon":
+        return  .pink
+    case "electric":
+        return .yellow
+    case "fairy":
+        return .pink
+    case "fighting":
+        return .brown
+    case "fire":
+        return .red
+    case "flying":
+        return .cyan
+    case "grass":
+        return .green
+    case "ground":
+        return .brown
+    case "ice":
+        return .mint
+    case "normal":
+        return .gray
+    case "poison":
+        return .purple
+    case "psychic":
+        return .indigo
+    case "rock":
+        return .brown
+    case "water":
+        return .blue
+    default:
+        return  .gray
     }
 }
-
-
-//enum PokemonType: String, Codable, Identifiable {
-//    
-//    var id: String { rawValue }
-//    
-//    case grass
-//    case fire
-//    case water
-//    case bug
-//    case normal
-//    case dark
-//    case poison
-//    case electric
-//    case ice
-//    case fairy
-//    case ground
-//    case fighting
-//    case psychic
-//    case rock
-//    case ghost
-//    case dragon
-//    case steel
-//    case flying
-//}
-
-
