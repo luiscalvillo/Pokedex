@@ -14,7 +14,7 @@ struct ContentView: View {
     @State private var showDetailView: Bool = false
     
     private let adaptiveColumns = [
-        GridItem(.adaptive(minimum: 150))
+        GridItem(.adaptive(minimum: 120))
     ]
     
     var body: some View {
@@ -27,10 +27,12 @@ struct ContentView: View {
                         }
                     }
                 }
+                .background(.white)
                 .animation(.easeIn(duration: 0.3), value: vm.filteredPokemon.count)
                 .navigationTitle("Pokedex")
                 .navigationBarTitleDisplayMode(.inline)
             }
+            .background(.red)
             .searchable(text: $vm.searchText)
         }
         .environmentObject(vm)

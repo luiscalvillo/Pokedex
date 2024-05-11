@@ -14,7 +14,7 @@ struct PokemonView: View {
     @Binding var showDetailView: Bool
     
     let pokemon: Pokemon
-    let dimensions: Double = 140
+    let dimensions: Double = 90
     let detailViewDimensions: Double = 300
     
     var body: some View {
@@ -28,12 +28,13 @@ struct PokemonView: View {
                 ProgressView()
                     .frame(width: showDetailView ? detailViewDimensions : dimensions, height: showDetailView ? detailViewDimensions : dimensions)
             }
-            .background(.thinMaterial)
+            .background(.white)
             .clipShape(Circle())
             
             Text("\(pokemon.name.uppercased())")
-                .font(showDetailView ? .title : .headline)
+                .font(showDetailView ? .title : .subheadline)
                 .fontWeight(.bold)
+                .foregroundColor(Color.black)
                 .padding(.bottom, 20)
         }
     }
