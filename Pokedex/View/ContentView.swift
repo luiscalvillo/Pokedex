@@ -17,6 +17,14 @@ struct ContentView: View {
         GridItem(.adaptive(minimum: 120))
     ]
     
+    
+    init() {
+        UINavigationBar.appearance().barTintColor = .red // Set navigation bar color
+        UINavigationBar.appearance().titleTextAttributes = [.foregroundColor: UIColor.white] // Set title color
+        UINavigationBar.appearance().isTranslucent = false
+        UINavigationBar.appearance().tintColor = .white
+    }
+    
     var body: some View {
         NavigationView {
             ScrollView {

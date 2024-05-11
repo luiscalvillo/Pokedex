@@ -15,7 +15,7 @@ struct PokemonView: View {
     
     let pokemon: Pokemon
     let dimensions: Double = 90
-    let detailViewDimensions: Double = 300
+    let detailViewDimensions: Double = UIScreen.main.bounds.width
     
     var body: some View {
         VStack {
@@ -28,8 +28,8 @@ struct PokemonView: View {
                 ProgressView()
                     .frame(width: showDetailView ? detailViewDimensions : dimensions, height: showDetailView ? detailViewDimensions : dimensions)
             }
-            .background(.white)
-            .clipShape(Circle())
+//            .background(.white)
+//            .clipShape(Circle())
             
             Text("\(pokemon.name.uppercased())")
                 .font(showDetailView ? .title : .subheadline)
