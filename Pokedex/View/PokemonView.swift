@@ -18,24 +18,25 @@ struct PokemonView: View {
     let detailViewDimensions: Double = UIScreen.main.bounds.width
     
     var body: some View {
-        VStack {
-            AsyncImage(url: URL(string: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/\(vm.getPokemonIndex(pokemon: pokemon)).png")) { image in
-                image
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: showDetailView ? detailViewDimensions : dimensions, height: showDetailView ? detailViewDimensions : dimensions)
-            } placeholder: {
-                ProgressView()
-                    .frame(width: showDetailView ? detailViewDimensions : dimensions, height: showDetailView ? detailViewDimensions : dimensions)
+        ZStack {
+            VStack {
+                AsyncImage(url: URL(string: "\(PokemonManager.PokemonSprites.official.rawValue)\(vm.getPokemonIndex(pokemon: pokemon)).png"))
+                { image in
+                    image
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: showDetailView ? detailViewDimensions : dimensions, height: showDetailView ? detailViewDimensions : dimensions)
+                } placeholder: {
+                    ProgressView()
+                        .frame(width: showDetailView ? detailViewDimensions : dimensions, height: showDetailView ? detailViewDimensions : dimensions)
+                }
+                
+                Text("\(pokemon.name.uppercased())")
+                    .font(showDetailView ? .title : .subheadline)
+                    .fontWeight(.bold)
+                    .foregroundColor(Color.black)
+                    .padding(.bottom, 20)
             }
-//            .background(.white)
-//            .clipShape(Circle())
-            
-            Text("\(pokemon.name.uppercased())")
-                .font(showDetailView ? .title : .subheadline)
-                .fontWeight(.bold)
-                .foregroundColor(Color.black)
-                .padding(.bottom, 20)
         }
     }
 }

@@ -8,6 +8,12 @@
 import Foundation
 
 class PokemonManager {
+    
+    enum PokemonSprites: String {
+        case home = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/home/"
+        case official = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/"
+        case sprite = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/"
+    }
     func getPokemon() -> [Pokemon] {
         let data: PokemonPage = Bundle.main.decode(file: "pokemon.json")
         let pokemon: [Pokemon] = data.results

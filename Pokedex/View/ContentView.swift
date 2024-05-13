@@ -35,12 +35,10 @@ struct ContentView: View {
                         }
                     }
                 }
-                .background(.white)
                 .animation(.easeIn(duration: 0.3), value: vm.filteredPokemon.count)
                 .navigationTitle("Pokedex")
                 .navigationBarTitleDisplayMode(.inline)
             }
-            .background(.red)
             .searchable(text: $vm.searchText)
         }
         .environmentObject(vm)
