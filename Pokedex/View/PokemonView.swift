@@ -19,9 +19,8 @@ struct PokemonView: View {
     
     var body: some View {
         ZStack {
-            VStack {
-                AsyncImage(url: URL(string: "\(PokemonManager.PokemonSprites.official.rawValue)\(vm.getPokemonIndex(pokemon: pokemon)).png"))
-                { image in
+            VStack(alignment: showDetailView ? .leading : .center) {
+                AsyncImage(url: URL(string: "\(PokemonManager.PokemonSprites.official.rawValue)\(vm.getPokemonIndex(pokemon: pokemon)).png")) { image in
                     image
                         .resizable()
                         .scaledToFit()
@@ -32,10 +31,10 @@ struct PokemonView: View {
                 }
                 
                 Text("\(pokemon.name.uppercased())")
-                    .font(showDetailView ? .title : .subheadline)
-                    .fontWeight(.bold)
+                    .font(showDetailView ? .largeTitle : .subheadline)
+                    .fontWeight(showDetailView ? .black : .bold)
                     .foregroundColor(Color.black)
-                    .padding(.bottom, 20)
+                    .padding(.leading, 16)
             }
         }
     }

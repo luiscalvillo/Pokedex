@@ -26,9 +26,22 @@ struct PokemonDetailView: View {
         
         ScrollView {
             VStack {
-                Text("# \(vm.pokemonDetails?.id ?? 0)")
-                    .font(.title)
-                PokemonView(showDetailView: $showDetailView, pokemon: pokemon)
+                ZStack {
+                    WaterShape()
+                        .fill(LinearGradient(gradient: Gradient(colors: [Color(#colorLiteral(red: 0.1960784346, green: 0.3411764801, blue: 0.1019607857, alpha: 1)),Color(#colorLiteral(red: 0.721568644, green: 0.8862745166, blue: 0.5921568871, alpha: 1))]), startPoint: .topLeading, endPoint: .bottomTrailing))
+                        .ignoresSafeArea()
+                        .frame(maxWidth: .infinity)
+                        .frame(height: 500)
+                    
+                    VStack(alignment: .leading) {
+                        
+                        PokemonView(showDetailView: $showDetailView, pokemon: pokemon)
+                        Text("# \(vm.pokemonDetails?.id ?? 0)")
+                            .font(.title)
+                            .padding(.leading, 16)
+                            .foregroundColor(.secondary)
+                    }
+                }
                 
                 HStack {
                     VStack(alignment: .leading, spacing: 10) {
@@ -100,6 +113,20 @@ struct PokemonDetailView: View {
         }
         .background(.white)
         .foregroundColor(.black)
+    }
+}
+
+struct WaterShape: Shape {
+    func path(in rect: CGRect) -> Path {
+        Path { path in
+            path.move(to: CGPoint(x: rect.minX, y: rect.midY))
+            path.addQuadCurve(to: CGPoint(x: rect.midX, y: rect.midY),
+                              control: CGPoint(x: rect.width * 0.25, y: rect.height * 0.60))
+            path.addQuadCurve(to: CGPoint(x: rect.maxX, y: rect.midY),
+                              control: CGPoint(x: rect.width * 0.75, y: rect.height * 0.40))
+            path.addLine(to: CGPoint(x: rect.maxX, y: rect.minY))
+            path.addLine(to: CGPoint(x: rect.minX, y: rect.minY))
+        }
     }
 }
 
