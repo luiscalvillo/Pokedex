@@ -17,12 +17,12 @@ struct ContentView: View {
         GridItem(.adaptive(minimum: 120))
     ]
     
-    
     init() {
-        UINavigationBar.appearance().barTintColor = .red // Set navigation bar color
-        UINavigationBar.appearance().titleTextAttributes = [.foregroundColor: UIColor.white] // Set title color
+        let appearance = UINavigationBarAppearance.whiteBackground()
+        UINavigationBar.appearance().standardAppearance = appearance
+        UINavigationBar.appearance().compactAppearance = appearance
+        UINavigationBar.appearance().scrollEdgeAppearance = appearance
         UINavigationBar.appearance().isTranslucent = false
-        UINavigationBar.appearance().tintColor = .white
     }
     
     var body: some View {
@@ -47,4 +47,16 @@ struct ContentView: View {
 
 #Preview {
     ContentView()
+}
+
+
+extension UINavigationBarAppearance {
+    static func whiteBackground() -> UINavigationBarAppearance {
+        let appearance = UINavigationBarAppearance()
+        appearance.configureWithOpaqueBackground()
+        appearance.backgroundColor = .white
+        appearance.titleTextAttributes = [.foregroundColor: UIColor.black] // Set title text color if needed
+        appearance.largeTitleTextAttributes = [.foregroundColor: UIColor.black] // Set large title text color if needed
+        return appearance
+    }
 }

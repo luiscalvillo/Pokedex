@@ -23,23 +23,25 @@ struct PokemonDetailView: View {
         
         let pokemonTypeHeight: CGFloat = 40
         let pokemonTypeWidth: CGFloat = 140
-        
+        let screenWidth = UIScreen.main.bounds.width + 200
+
         ScrollView {
             VStack {
                 ZStack {
                     WaterShape()
-                        .fill(LinearGradient(gradient: Gradient(colors: [Color(#colorLiteral(red: 0.1960784346, green: 0.3411764801, blue: 0.1019607857, alpha: 1)),Color(#colorLiteral(red: 0.721568644, green: 0.8862745166, blue: 0.5921568871, alpha: 1))]), startPoint: .topLeading, endPoint: .bottomTrailing))
+                        .fill(getPokemonBackgroundGradient(type: pokemonType1 ?? ""))
                         .ignoresSafeArea()
                         .frame(maxWidth: .infinity)
-                        .frame(height: 500)
-                    
+                        .frame(height: screenWidth)
+
                     VStack(alignment: .leading) {
-                        
+
                         PokemonView(showDetailView: $showDetailView, pokemon: pokemon)
+                        
                         Text("# \(vm.pokemonDetails?.id ?? 0)")
                             .font(.title)
                             .padding(.leading, 16)
-                            .foregroundColor(.secondary)
+                            .foregroundColor(.gray)
                     }
                 }
                 
@@ -84,6 +86,7 @@ struct PokemonDetailView: View {
                         Text("Weight")
                             .multilineTextAlignment(.leading)
                             .font(.title)
+                            .foregroundColor(convertPokemonTypeToAColor(type: pokemonType1 ?? ""))
                             .fontWeight(.bold)
                         
                         Text("\(vm.formatHeightWeight(value: vm.pokemonDetails?.weight ?? 0)) KG")
@@ -91,13 +94,15 @@ struct PokemonDetailView: View {
                         
                         Text("Height")
                             .font(.title)
+                            .foregroundColor(convertPokemonTypeToAColor(type: pokemonType1 ?? ""))
                             .fontWeight(.bold)
                         
-                        Text("\(vm.formatHeightWeight(value: vm.pokemonDetails?.height ?? 0)) M")
+                        Text("\(vm.formatHeightWeight(value: vm.pokemonDetails?.height  ?? 0)) M")
                             .font(.title)
                         
                         Text("Catch Rate")
                             .font(.title)
+                            .foregroundColor(convertPokemonTypeToAColor(type: pokemonType1 ?? ""))
                             .fontWeight(.bold)
                         Text("\(vm.species?.captureRate ?? 0)")
                             .font(.title)
