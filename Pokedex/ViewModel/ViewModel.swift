@@ -43,7 +43,6 @@ final class ViewModel: ObservableObject {
         pokemonManager.getDetailedPokemon(id: id) { data in
             DispatchQueue.main.async {
                 self.pokemonDetails = data
-                print("\(data)")
             }
         }
     }
@@ -56,7 +55,6 @@ final class ViewModel: ObservableObject {
         pokemonManager.getPokemonSpecies(id: id) { data in
             DispatchQueue.main.async {
                 self.species = data
-                print("\(data)")
             }
         }
     }
