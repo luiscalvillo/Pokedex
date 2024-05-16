@@ -38,7 +38,8 @@ final class ViewModel: ObservableObject {
     func getDetails(pokemon: Pokemon) {
         let id = getPokemonIndex(pokemon: pokemon)
         
-        self.pokemonDetails = DetailPokemon(id: 0, height: 0, weight: 0, types: [TypeElement.init(slot: 0, type: PokemonType.init(name: "fire"))] )
+        self.pokemonDetails = DetailPokemon(id: 0, height: 0, weight: 0, types: [TypeElement.init(slot: 0, type: PokemonType.init(name: "none"))], stats: [Stats.init(baseStat: 0, stat: Stat.init(name: "none"))] )
+      
         pokemonManager.getDetailedPokemon(id: id) { data in
             DispatchQueue.main.async {
                 self.pokemonDetails = data

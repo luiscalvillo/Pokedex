@@ -15,6 +15,9 @@ struct PokemonDetailView: View {
     
     let pokemon: Pokemon
     
+    @State var statName: String = "HP"
+    @State var screenBounds = UIScreen.main.bounds.width
+    
     var body: some View {
         
         let pokemonType1 = vm.pokemonDetails?.types.first?.type.name
@@ -24,7 +27,7 @@ struct PokemonDetailView: View {
         let pokemonTypeHeight: CGFloat = 40
         let pokemonTypeWidth: CGFloat = 140
         let screenWidth = UIScreen.main.bounds.width + 200
-
+        
         ScrollView {
             VStack {
                 ZStack {
@@ -33,9 +36,9 @@ struct PokemonDetailView: View {
                         .ignoresSafeArea()
                         .frame(maxWidth: .infinity)
                         .frame(height: screenWidth)
-
+                    
                     VStack(alignment: .leading) {
-
+                        
                         PokemonView(showDetailView: $showDetailView, pokemon: pokemon)
                         
                         Text("# \(vm.pokemonDetails?.id ?? 0)")
@@ -76,12 +79,29 @@ struct PokemonDetailView: View {
                             }
                         }
                         
+                        Text("Stats")
+                            .font(.title)
+                            .fontWeight(.bold)
+                        
+                        if let stats = vm.pokemonDetails?.stats {
+                            ForEach(stats) { stat in
+                                StatBarView(statName: stat.stat.name, statValue: stat.baseStat, maxValue: 100, screenBounds: $screenBounds)
+                            }
+                        }
+                        else {
+                            Text("No stats available")
+                        }
+                        
                         // MARK: - Species Description
                         
                         Text("\(vm.species?.flavorTextEntries.first?.flavorText.replacingOccurrences(of: "\n", with: " ").replacingOccurrences(of: "\u{0C}", with: " ") ?? "")")
                             .font(.title2)
                             .lineLimit(4)
                             .frame(height: 100)
+                    
+                        Text("Characteristics")
+                            .font(.title)
+                            .fontWeight(.bold)
                         
                         Text("Weight")
                             .multilineTextAlignment(.leading)
@@ -139,4 +159,39 @@ struct WaterShape: Shape {
 #Preview {
     PokemonDetailView(pokemon: Pokemon.samplePokemon)
         .environmentObject(ViewModel())
+}
+
+
+struct StatBarView: View {
+    
+    let statName: String
+    let statValue: Int
+    let maxValue: Int
+    @Binding var  screenBounds: CGFloat
+    
+    var body: some View {
+        HStack {
+            Text(statName)
+                .frame(width: 50, alignment: .leading)
+            Text("\(statValue)")
+                .frame(width: 50, alignment: .leading)
+            
+            ZStack(alignment: .leading) {
+                
+                // Background rectangle bar for the max value
+                Rectangle()
+                    .frame(width: screenBounds - 140, height: 20)
+                    .foregroundColor(Color(.systemGray5))
+                    .cornerRadius(10)
+                
+                // Foreground rectangle bar
+                Rectangle()
+                    .frame(width: CGFloat(statValue / maxValue) * screenBounds, height: 20)
+                    .foregroundColor(.blue)
+                    .cornerRadius(10)
+            }
+        }
+        .padding(.vertical, 0)
+        .cornerRadius(10)
+    }
 }

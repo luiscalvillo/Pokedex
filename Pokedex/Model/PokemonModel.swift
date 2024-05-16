@@ -27,6 +27,7 @@ struct DetailPokemon: Codable {
     let height: Int
     let weight: Int
     let types: [TypeElement]
+    let stats: [Stats]
 }
 
 struct PokemonColor: Codable {
@@ -158,4 +159,22 @@ func getPokemonBackgroundGradient(type: String) -> LinearGradient {
     default:
         return LinearGradient(gradient: Gradient(colors: [Color(#colorLiteral(red: 0.3411764801, green: 0.6235294342, blue: 0.1686274558, alpha: 1)),Color(#colorLiteral(red: 0.9764705896, green: 0.850980401, blue: 0.5490196347, alpha: 1))]), startPoint: .topLeading, endPoint: .bottomTrailing)
     }
+}
+
+
+// MARK: - Pokemon Stats
+
+struct Stats: Codable, Identifiable {
+    let id = UUID()
+    let baseStat: Int
+    let stat: Stat
+    
+    enum CodingKeys: String, CodingKey {
+        case baseStat = "base_stat"
+        case stat = "stat"
+    }
+}
+
+struct Stat: Codable {
+    let name: String
 }
