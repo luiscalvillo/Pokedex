@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+
 struct PokemonDetailView: View {
     
     @EnvironmentObject var vm: ViewModel
@@ -18,8 +19,10 @@ struct PokemonDetailView: View {
     @State var statName: String = "HP"
     @State var screenBounds = UIScreen.main.bounds.width
     
+    var baseStatBarWidth: CGFloat = 0
+
     var body: some View {
-        
+
         let pokemonType1 = vm.pokemonDetails?.types.first?.type.name
         let pokemonType2 = vm.pokemonDetails?.types.last?.type.name
         let pokemonTypeCount = vm.pokemonDetails?.types.count
@@ -27,6 +30,9 @@ struct PokemonDetailView: View {
         let pokemonTypeHeight: CGFloat = 40
         let pokemonTypeWidth: CGFloat = 140
         let screenWidth = UIScreen.main.bounds.width
+        
+        let pokemonGradient = getPokemonBackgroundGradient(type: pokemonType1 ?? "")
+        let pokemonColor = convertPokemonTypeToAColor(type: pokemonType1 ?? "")
         
         ScrollView {
             VStack {
@@ -49,7 +55,7 @@ struct PokemonDetailView: View {
                 }
                 
                 HStack {
-                    VStack(alignment: .leading, spacing: 10) {
+                    VStack(alignment: .leading, spacing: 8) {
                         
                         // MARK: - Pokemon Type
                         HStack {
@@ -91,20 +97,21 @@ struct PokemonDetailView: View {
                             .fontWeight(.bold)
                         
                         if let stats = vm.pokemonDetails?.stats {
+                            
                             ForEach(stats) { stat in
                                 
-                                let baseStatDividedByMaxStat = CGFloat(stat.baseStat) / 200
+                                let baseStatDividedByMaxStat = CGFloat(stat.baseStat) / 400
                                 let baseStatBarWidth = baseStatDividedByMaxStat * screenWidth
-
-                                StatBarView(statName: stat.stat.name, statValue: stat.baseStat, maxValue: 200, screenBounds: screenWidth, barWidth: baseStatBarWidth)
+                                
+                                StatBarView(statName: stat.stat.name, statValue: stat.baseStat, maxValue: 400, screenBounds: screenWidth, barWidth: baseStatBarWidth, pokemonColor: pokemonColor)
                             }
                         }
                         else {
                             Text("No stats available")
                         }
-                                            
+                        
                         // MARK: - Characteristics
-                    
+                        
                         Text("Characteristics")
                             .font(.title)
                             .fontWeight(.bold)
@@ -136,7 +143,7 @@ struct PokemonDetailView: View {
                     }
                     Spacer()
                 }
-                .padding(16)
+                .padding(16) // leading and trailing screen padding
             }
             .onAppear {
                 vm.getDetails(pokemon: pokemon)
@@ -145,6 +152,10 @@ struct PokemonDetailView: View {
         }
         .background(.white)
         .foregroundColor(.black)
+    }
+    
+    func calculateTotalPoints(baseStat: Int, total: Int) -> Int {
+        return total + baseStat
     }
 }
 
@@ -175,13 +186,14 @@ struct StatBarView: View {
     let maxValue: Int
     let screenBounds: CGFloat
     let barWidth: CGFloat
+    let pokemonColor: Color
     
     var body: some View {
-        VStack(alignment: .leading) {
+        VStack(alignment: .leading, spacing: 0) {
             HStack {
                 Text(statName.uppercased())
                     .frame(width: 250, alignment: .leading)
-                    .font(.title3)
+                    .font(.subheadline)
                     .foregroundColor(.gray)
                     .fontWeight(.bold)
             }
@@ -189,18 +201,18 @@ struct StatBarView: View {
                 // Background rectangle bar for the max value
                 Rectangle()
                     .frame(width: screenBounds - 32, height: 24)
-                    .foregroundColor(Color(.systemGray5))
+                    .foregroundColor(Color(.systemGray6))
                     .cornerRadius(10)
                 // Foreground rectangle bar
                 Rectangle()
                     .frame(width: barWidth, height: 24)
-                    .foregroundColor(.blue)
+                    .foregroundColor(pokemonColor)
                     .cornerRadius(10)
                 // Text showing the stat value
                 Text("\(Int(statValue))")
                     .font(.title3)
                     .fontWeight(.bold)
-                    .foregroundColor(.blue)
+                    .foregroundColor(pokemonColor)
                     .padding(.leading, barWidth + 5) // Adjust the padding to position the text after the blue bar
             }
         }
