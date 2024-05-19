@@ -18,7 +18,7 @@ struct ContentView: View {
     ]
     
     init() {
-        let appearance = UINavigationBarAppearance.whiteBackground()
+        let appearance = UINavigationBarAppearance.background()
         UINavigationBar.appearance().standardAppearance = appearance
         UINavigationBar.appearance().compactAppearance = appearance
         UINavigationBar.appearance().scrollEdgeAppearance = appearance
@@ -51,12 +51,12 @@ struct ContentView: View {
 
 
 extension UINavigationBarAppearance {
-    static func whiteBackground() -> UINavigationBarAppearance {
+    static func background() -> UINavigationBarAppearance {
         let appearance = UINavigationBarAppearance()
         appearance.configureWithOpaqueBackground()
-        appearance.backgroundColor = .white
-        appearance.titleTextAttributes = [.foregroundColor: UIColor.black] // Set title text color if needed
-        appearance.largeTitleTextAttributes = [.foregroundColor: UIColor.black] // Set large title text color if needed
+        appearance.backgroundColor = .systemBackground
+        appearance.titleTextAttributes = [.foregroundColor: UIColor.label] // Set title text color if needed
+        appearance.largeTitleTextAttributes = [.foregroundColor: UIColor.label] // Set large title text color if needed
         return appearance
     }
 }

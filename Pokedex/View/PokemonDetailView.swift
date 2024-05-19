@@ -150,8 +150,8 @@ struct PokemonDetailView: View {
                 vm.getSpecies(pokemon: pokemon)
             }
         }
-        .background(.white)
-        .foregroundColor(.black)
+        .background(Color(.systemBackground))
+        .foregroundColor(Color(.label))
     }
     
     func calculateTotalPoints(baseStat: Int, total: Int) -> Int {
