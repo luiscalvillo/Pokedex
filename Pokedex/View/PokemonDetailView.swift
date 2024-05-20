@@ -16,7 +16,6 @@ struct PokemonDetailView: View {
     
     let pokemon: Pokemon
     
-    @State var statName: String = "HP"
     @State var screenBounds = UIScreen.main.bounds.width
     
     var baseStatBarWidth: CGFloat = 0
@@ -33,6 +32,8 @@ struct PokemonDetailView: View {
         
         let pokemonGradient = getPokemonBackgroundGradient(type: pokemonType1 ?? "")
         let pokemonColor = convertPokemonTypeToAColor(type: pokemonType1 ?? "")
+        
+        let maxStatValue = 1000
         
         ScrollView {
             VStack {
@@ -98,13 +99,29 @@ struct PokemonDetailView: View {
                         
                         if let stats = vm.pokemonDetails?.stats {
                             
+                            let totalBaseStats = stats.reduce(0) { $0 + $1.baseStat }
+                            
                             ForEach(stats) { stat in
                                 
-                                let baseStatDividedByMaxStat = CGFloat(stat.baseStat) / 400
+                                let baseStatDividedByMaxStat = CGFloat(stat.baseStat) / CGFloat(maxStatValue)
                                 let baseStatBarWidth = baseStatDividedByMaxStat * screenWidth
                                 
-                                StatBarView(statName: stat.stat.name, statValue: stat.baseStat, maxValue: 400, screenBounds: screenWidth, barWidth: baseStatBarWidth, pokemonColor: pokemonColor)
+                                StatBarView(statName: stat.stat.name,
+                                            statValue: stat.baseStat,
+                                            maxValue: maxStatValue,
+                                            screenBounds: screenWidth,
+                                            barWidth: baseStatBarWidth,
+                                            pokemonColor: pokemonColor)
                             }
+                            
+                            let totalBaseStatDividedByMaxStat = CGFloat(totalBaseStats) / CGFloat(maxStatValue)
+                            let totalBaseStatBarWidth = totalBaseStatDividedByMaxStat * screenBounds
+                            
+                            StatBarView(statName: "Total", statValue: totalBaseStats,
+                                        maxValue: maxStatValue,
+                                        screenBounds: screenBounds,
+                                        barWidth: totalBaseStatBarWidth,
+                                        pokemonColor: pokemonColor)
                         }
                         else {
                             Text("No stats available")
