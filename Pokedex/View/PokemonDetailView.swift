@@ -13,34 +13,48 @@ struct PokemonDetailView: View {
     @EnvironmentObject var vm: ViewModel
     
     @State private var showDetailView: Bool = true
-    @State var screenBounds = UIScreen.main.bounds.width
     
     let pokemon: Pokemon
-    var baseStatBarWidth: CGFloat = 0
+        
+    private var screenBoundsWidth: CGFloat {
+        UIScreen.main.bounds.width
+    }
+    
+    private var pokemonType1: String? {
+        vm.pokemonDetails?.types.first?.type.name
+    }
+    
+    private var pokemonType2: String? {
+        vm.pokemonDetails?.types.first?.type.name
+    }
+    
+    private var pokemonTypeCount: Int? {
+        vm.pokemonDetails?.types.count
+    }
+    
+    private var pokemonGradient: LinearGradient {
+        getPokemonBackgroundGradient(type: pokemonType1 ?? "")
+    }
+    
+    private var pokemonColor: Color {
+        convertPokemonTypeToAColor(type: pokemonType1 ?? "")
+    }
+    
+    let maxStatValue = 1000
+    let pokemonTypeHeight: CGFloat = 40
+    let pokemonTypeWidth: CGFloat = 140
+
     
     var body: some View {
-        
-        let pokemonType1 = vm.pokemonDetails?.types.first?.type.name
-        let pokemonType2 = vm.pokemonDetails?.types.last?.type.name
-        let pokemonTypeCount = vm.pokemonDetails?.types.count
-        
-        let pokemonTypeHeight: CGFloat = 40
-        let pokemonTypeWidth: CGFloat = 140
-        let screenWidth = UIScreen.main.bounds.width
-        
-        let pokemonGradient = getPokemonBackgroundGradient(type: pokemonType1 ?? "")
-        let pokemonColor = convertPokemonTypeToAColor(type: pokemonType1 ?? "")
-        
-        let maxStatValue = 1000
         
         ScrollView {
             VStack {
                 ZStack {
                     BackgroundCurveShape()
-                        .fill(getPokemonBackgroundGradient(type: pokemonType1 ?? ""))
+                        .fill(pokemonGradient)
                         .ignoresSafeArea()
                         .frame(maxWidth: .infinity)
-                        .frame(height: screenWidth)
+                        .frame(height: screenBoundsWidth)
                     
                     VStack(alignment: .leading) {
                         
@@ -61,9 +75,7 @@ struct PokemonDetailView: View {
                             if pokemonTypeCount == 1{
                                 TypeView(pokemonTypeWidth: pokemonTypeWidth, pokemonTypeHeight: pokemonTypeHeight, pokemonType: pokemonType1 ?? "")
                             } else {
-                                
                                 TypeView(pokemonTypeWidth: pokemonTypeWidth, pokemonTypeHeight: pokemonTypeHeight, pokemonType: pokemonType1 ?? "")
-                                
                                 TypeView(pokemonTypeWidth: pokemonTypeWidth, pokemonTypeHeight: pokemonTypeHeight, pokemonType: pokemonType2 ?? "")
                             }
                         }
@@ -85,25 +97,16 @@ struct PokemonDetailView: View {
                             let totalBaseStats = stats.reduce(0) { $0 + $1.baseStat }
                             
                             ForEach(stats) { stat in
-                                
-                                let baseStatDividedByMaxStat = CGFloat(stat.baseStat) / CGFloat(maxStatValue)
-                                let baseStatBarWidth = baseStatDividedByMaxStat * screenWidth
-                                
                                 StatBarView(statName: stat.stat.name,
                                             statValue: stat.baseStat,
                                             maxValue: maxStatValue,
-                                            screenBounds: screenWidth,
-                                            barWidth: baseStatBarWidth,
+                                            screenBounds: screenBoundsWidth,
                                             pokemonColor: pokemonColor)
                             }
                             
-                            let totalBaseStatDividedByMaxStat = CGFloat(totalBaseStats) / CGFloat(maxStatValue)
-                            let totalBaseStatBarWidth = totalBaseStatDividedByMaxStat * screenBounds
-                            
                             StatBarView(statName: "Total", statValue: totalBaseStats,
                                         maxValue: maxStatValue,
-                                        screenBounds: screenBounds,
-                                        barWidth: totalBaseStatBarWidth,
+                                        screenBounds: screenBoundsWidth,
                                         pokemonColor: pokemonColor)
                         }
                         else {
@@ -113,18 +116,9 @@ struct PokemonDetailView: View {
                         // MARK: - Characteristics
                         
                         SectionTitleView(title: "Characteristics")
-                        
-                        SectionSubheadingView(title: "Weight", pokemonType1: pokemonType1 ?? "")
-                        Text("\(vm.formatHeightWeight(value: vm.pokemonDetails?.weight ?? 0)) KG")
-                            .font(.title3)
-                        
-                        SectionSubheadingView(title: "Height", pokemonType1: pokemonType1 ?? "")
-                        Text("\(vm.formatHeightWeight(value: vm.pokemonDetails?.height  ?? 0)) M")
-                            .font(.title3)
-                        
-                        SectionSubheadingView(title: "Catch Rate", pokemonType1: pokemonType1 ?? "")
-                        Text("\(vm.species?.captureRate ?? 0)")
-                            .font(.title3)
+                        CharacteristicView(title: "Weight", value: vm.formatHeightWeight(value: vm.pokemonDetails?.weight ?? 0), unit: "KG", color: pokemonColor)
+                        CharacteristicView(title: "Height", value: vm.formatHeightWeight(value: vm.pokemonDetails?.height ?? 0), unit: "M", color: pokemonColor)
+                        CharacteristicView(title: "Catch Rate", value: "\(vm.species?.captureRate ?? 0)", color: pokemonColor)
                     }
                     Spacer()
                 }
@@ -196,13 +190,13 @@ struct SectionTitleView: View {
 struct SectionSubheadingView: View {
     
     let title: String
-    let pokemonType1: String
+    let color: Color
     
     var body: some View {
         Text(title)
             .multilineTextAlignment(.leading)
             .font(.title2)
-            .foregroundColor(convertPokemonTypeToAColor(type: pokemonType1))
+            .foregroundColor(color)
             .fontWeight(.bold)
     }
 }
@@ -213,8 +207,12 @@ struct StatBarView: View {
     let statValue: Int
     let maxValue: Int
     let screenBounds: CGFloat
-    let barWidth: CGFloat
     let pokemonColor: Color
+    let leadingAndTrailingPadding: CGFloat = 32
+    
+    var barWidth: CGFloat {
+        CGFloat(statValue) / CGFloat(maxValue) * (screenBounds - leadingAndTrailingPadding)
+    }
     
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
@@ -246,5 +244,27 @@ struct StatBarView: View {
         }
         .padding(.vertical, 0)
         .cornerRadius(10)
+    }
+}
+
+struct CharacteristicView: View {
+    let title: String
+    let value: String
+    let unit: String?
+    let color: Color
+    
+    var body: some View {
+        VStack(alignment: .leading) {
+            SectionSubheadingView(title: title, color: color)
+            Text("\(value) \(unit ?? "")")
+                .font(.title3)
+        }
+    }
+    
+    init(title: String, value: String, unit: String? = nil, color: Color) {
+        self.title = title
+        self.value = value
+        self.unit = unit
+        self.color = color
     }
 }
