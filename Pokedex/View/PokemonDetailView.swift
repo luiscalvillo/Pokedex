@@ -13,15 +13,13 @@ struct PokemonDetailView: View {
     @EnvironmentObject var vm: ViewModel
     
     @State private var showDetailView: Bool = true
-    
-    let pokemon: Pokemon
-    
     @State var screenBounds = UIScreen.main.bounds.width
     
+    let pokemon: Pokemon
     var baseStatBarWidth: CGFloat = 0
-
+    
     var body: some View {
-
+        
         let pokemonType1 = vm.pokemonDetails?.types.first?.type.name
         let pokemonType2 = vm.pokemonDetails?.types.last?.type.name
         let pokemonTypeCount = vm.pokemonDetails?.types.count
@@ -38,7 +36,7 @@ struct PokemonDetailView: View {
         ScrollView {
             VStack {
                 ZStack {
-                    WaterShape()
+                    BackgroundCurveShape()
                         .fill(getPokemonBackgroundGradient(type: pokemonType1 ?? ""))
                         .ignoresSafeArea()
                         .frame(maxWidth: .infinity)
@@ -61,30 +59,16 @@ struct PokemonDetailView: View {
                         // MARK: - Pokemon Type
                         HStack {
                             if pokemonTypeCount == 1{
-                                Text("\(pokemonType1?.uppercased() ?? "")")
-                                    .font(.title3)
-                                    .foregroundStyle(.white)
-                                    .padding(8)
-                                    .frame(width: pokemonTypeWidth, height: pokemonTypeHeight)
-                                    .background(convertPokemonTypeToAColor(type: pokemonType1 ?? ""))
-                                    .cornerRadius(20)
+                                TypeView(pokemonTypeWidth: pokemonTypeWidth, pokemonTypeHeight: pokemonTypeHeight, pokemonType: pokemonType1 ?? "")
                             } else {
-                                Text("\(pokemonType1?.uppercased() ?? "")")
-                                    .font(.title3)
-                                    .foregroundStyle(.white)
-                                    .padding(8)
-                                    .frame(width: pokemonTypeWidth, height: pokemonTypeHeight)
-                                    .background(convertPokemonTypeToAColor(type: pokemonType1 ?? ""))
-                                    .cornerRadius(20)
-                                Text("\(pokemonType2?.uppercased() ?? "")")
-                                    .font(.title3)
-                                    .foregroundStyle(.white)
-                                    .padding(8)
-                                    .frame(width: pokemonTypeWidth, height: pokemonTypeHeight)
-                                    .background(convertPokemonTypeToAColor(type: pokemonType2 ?? ""))
-                                    .cornerRadius(20)
+                                
+                                TypeView(pokemonTypeWidth: pokemonTypeWidth, pokemonTypeHeight: pokemonTypeHeight, pokemonType: pokemonType1 ?? "")
+                                
+                                TypeView(pokemonTypeWidth: pokemonTypeWidth, pokemonTypeHeight: pokemonTypeHeight, pokemonType: pokemonType2 ?? "")
                             }
                         }
+                        
+                        // MARK: - Pokemon Description
                         
                         Text("\(vm.species?.flavorTextEntries.first?.flavorText.replacingOccurrences(of: "\n", with: " ").replacingOccurrences(of: "\u{0C}", with: " ") ?? "")")
                             .font(.title2)
@@ -93,12 +77,11 @@ struct PokemonDetailView: View {
                         
                         // MARK: - Stats
                         
-                        Text("Stats")
-                            .font(.title)
-                            .fontWeight(.bold)
+                        SectionTitleView(title: "Stats")
                         
                         if let stats = vm.pokemonDetails?.stats {
                             
+                            // Calculate the sum of all the base stat points
                             let totalBaseStats = stats.reduce(0) { $0 + $1.baseStat }
                             
                             ForEach(stats) { stat in
@@ -129,32 +112,17 @@ struct PokemonDetailView: View {
                         
                         // MARK: - Characteristics
                         
-                        Text("Characteristics")
-                            .font(.title)
-                            .fontWeight(.bold)
+                        SectionTitleView(title: "Characteristics")
                         
-                        Text("Weight")
-                            .multilineTextAlignment(.leading)
-                            .font(.title2)
-                            .foregroundColor(convertPokemonTypeToAColor(type: pokemonType1 ?? ""))
-                            .fontWeight(.bold)
-                        
+                        SectionSubheadingView(title: "Weight", pokemonType1: pokemonType1 ?? "")
                         Text("\(vm.formatHeightWeight(value: vm.pokemonDetails?.weight ?? 0)) KG")
                             .font(.title3)
                         
-                        Text("Height")
-                            .font(.title2)
-                            .foregroundColor(convertPokemonTypeToAColor(type: pokemonType1 ?? ""))
-                            .fontWeight(.bold)
-                        
+                        SectionSubheadingView(title: "Height", pokemonType1: pokemonType1 ?? "")
                         Text("\(vm.formatHeightWeight(value: vm.pokemonDetails?.height  ?? 0)) M")
                             .font(.title3)
                         
-                        Text("Catch Rate")
-                            .font(.title2)
-                            .foregroundColor(convertPokemonTypeToAColor(type: pokemonType1 ?? ""))
-                            .fontWeight(.bold)
-                        
+                        SectionSubheadingView(title: "Catch Rate", pokemonType1: pokemonType1 ?? "")
                         Text("\(vm.species?.captureRate ?? 0)")
                             .font(.title3)
                     }
@@ -170,13 +138,18 @@ struct PokemonDetailView: View {
         .background(Color(.systemBackground))
         .foregroundColor(Color(.label))
     }
-    
-    func calculateTotalPoints(baseStat: Int, total: Int) -> Int {
-        return total + baseStat
-    }
 }
 
-struct WaterShape: Shape {
+
+#Preview {
+    PokemonDetailView(pokemon: Pokemon.samplePokemon)
+        .environmentObject(ViewModel())
+}
+
+
+// MARK: - Subviews
+
+struct BackgroundCurveShape: Shape {
     func path(in rect: CGRect) -> Path {
         Path { path in
             path.move(to: CGPoint(x: rect.minX, y: rect.midY))
@@ -191,9 +164,47 @@ struct WaterShape: Shape {
 }
 
 
-#Preview {
-    PokemonDetailView(pokemon: Pokemon.samplePokemon)
-        .environmentObject(ViewModel())
+struct TypeView: View {
+    
+    let pokemonTypeWidth: CGFloat
+    let pokemonTypeHeight: CGFloat
+    let pokemonType: String
+    
+    var body: some View {
+        Text("\(pokemonType.uppercased())")
+            .font(.title3)
+            .foregroundStyle(.white)
+            .padding(8)
+            .frame(width: pokemonTypeWidth, height: pokemonTypeHeight)
+            .background(convertPokemonTypeToAColor(type: pokemonType))
+            .cornerRadius(20)
+    }
+}
+
+
+struct SectionTitleView: View {
+    
+    let title: String
+    
+    var body: some View {
+        Text(title)
+            .font(.title)
+            .fontWeight(.bold)
+    }
+}
+
+struct SectionSubheadingView: View {
+    
+    let title: String
+    let pokemonType1: String
+    
+    var body: some View {
+        Text(title)
+            .multilineTextAlignment(.leading)
+            .font(.title2)
+            .foregroundColor(convertPokemonTypeToAColor(type: pokemonType1))
+            .fontWeight(.bold)
+    }
 }
 
 struct StatBarView: View {

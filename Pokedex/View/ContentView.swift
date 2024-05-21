@@ -50,6 +50,8 @@ struct ContentView: View {
 }
 
 
+// MARK: - Extensions
+
 extension UINavigationBarAppearance {
     static func background() -> UINavigationBarAppearance {
         let appearance = UINavigationBarAppearance()
