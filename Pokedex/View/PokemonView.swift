@@ -33,7 +33,7 @@ struct PokemonView: View {
                 Text("\(pokemon.name.uppercased())")
                     .font(showDetailView ? .largeTitle : .subheadline)
                     .fontWeight(showDetailView ? .black : .bold)
-                    .foregroundColor(Color.black)
+                    .foregroundColor(Color(.label))
                     .padding(.leading, 16)
             }
         }

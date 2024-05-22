@@ -14,6 +14,7 @@ class PokemonManager {
         case official = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/"
         case sprite = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/"
     }
+    
     func getPokemon() -> [Pokemon] {
         let data: PokemonPage = Bundle.main.decode(file: "pokemon.json")
         let pokemon: [Pokemon] = data.results
@@ -21,17 +22,17 @@ class PokemonManager {
         return pokemon
     }
     
-    func getDetailedPokemon(id: Int, _completetion:@escaping (DetailPokemon) -> ()) {
+    func getDetailedPokemon(id: Int, _completion:@escaping (DetailPokemon) -> ()) {
         Bundle.main.fetchData(url: "https://pokeapi.co/api/v2/pokemon/\(id)/", model: DetailPokemon.self) { data in
-            _completetion(data)
+            _completion(data)
         } failure: { error in
             print(error)
         }
     }
     
-    func getPokemonSpecies(id: Int, _completetion:@escaping (Species) -> ()) {
+    func getPokemonSpecies(id: Int, _completion:@escaping (Species) -> ()) {
         Bundle.main.fetchData(url: "https://pokeapi.co/api/v2/pokemon-species/\(id)/", model: Species.self) { data in
-            _completetion(data)
+            _completion(data)
         } failure: { error in
             print(error)
         }
