@@ -36,11 +36,15 @@ struct PokemonDetailView: View {
     }
     
     private var pokemonGradient: LinearGradient {
-        getPokemonBackgroundGradient(type: pokemonType1 ?? "")
+        getPokemonBackgroundGradient(type: AllPokemonTypes(rawValue: pokemonType1 ?? "") ?? .bug)
+    }
+    
+    private var pokemonBottomGradient: LinearGradient {
+        getPokemonBackgroundGradient(type: AllPokemonTypes(rawValue: pokemonType2 ?? "") ?? .bug)
     }
     
     private var pokemonColor: Color {
-        convertPokemonTypeToAColor(type: pokemonType1 ?? "")
+        convertPokemonTypeToAColor(type: AllPokemonTypes(rawValue: pokemonType1 ?? "") ?? .bug)
     }
     
     private var pokemonDescription: String {
@@ -70,10 +74,16 @@ struct PokemonDetailView: View {
             VStack {
                 ZStack {
                     BackgroundCurveShape()
+                        .fill(pokemonBottomGradient)
+                        .ignoresSafeArea()
+                        .frame(maxWidth: .infinity)
+                        .frame(height: screenBoundsWidth + 100)
+                    BackgroundCurveShape()
                         .fill(pokemonGradient)
                         .ignoresSafeArea()
                         .frame(maxWidth: .infinity)
-                        .frame(height: screenBoundsWidth + 200)
+                        .frame(height: screenBoundsWidth + 150)
+                        .offset(CGSize(width: 0, height: -150))
                     
                     VStack(alignment: .leading) {
                         

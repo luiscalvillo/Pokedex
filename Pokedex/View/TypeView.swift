@@ -14,7 +14,7 @@ struct TypeView: View {
     var height: CGFloat = 40
     
     private var typeColor: Color {
-        convertPokemonTypeToAColor(type: pokemonType)
+        convertPokemonTypeToAColor(type: AllPokemonTypes(rawValue: pokemonType) ?? .bug)
     }
     
     var body: some View {

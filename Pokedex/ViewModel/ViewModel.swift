@@ -5,7 +5,6 @@
 //  Created by Luis Calvillo on 3/19/24.
 //
 
-import Foundation
 import SwiftUI
 
 final class ViewModel: ObservableObject {
