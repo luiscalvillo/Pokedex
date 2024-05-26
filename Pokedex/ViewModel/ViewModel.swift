@@ -12,9 +12,8 @@ final class ViewModel: ObservableObject {
     
     @Published var pokemonList = [Pokemon]()
     @Published var pokemonDetails: DetailPokemon?
-    @Published var searchText = ""
-    
     @Published var species: Species?
+    @Published var searchText = ""
         
     var filteredPokemon: [Pokemon] {
         return searchText == "" ? pokemonList : pokemonList.filter {
