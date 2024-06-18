@@ -69,7 +69,6 @@ struct PokemonDetailView: View {
     
     
     var body: some View {
-        
         ScrollView {
             VStack {
                 ZStack {
