@@ -1,6 +1,9 @@
 ## Pokedex
 A searchable iOS app to find information about Pokemon. 
 
+## Preview
+![me](https://github.com/luiscalvillo/Pokedex/blob/main/Screenshots/pokedex-iphone.gif)
+
 ## Technologies
 * SwiftUI
 * MVVM
